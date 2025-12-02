@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Helpnex</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>
+            <a href="{% url 'main' %}" class="logo">Helpnex</a>
+            {% if user.is_superuser %}
+                <span class="admin-badge">(Admin)</span>
+            {% endif %}
+        </h2>
+        <ul>
+            <li><a class="active" href="{% url 'main' %}">🏠 Inicio</a></li>
+            <li><a href="{% url 'analisis' %}">📊 Análisis</a></li>
+            
+            {% if user.is_superuser %}
+                <li><a href="{% url 'admin_panel' %}">🛠️ Panel Admin</a></li>
+            {% endif %}
+            
+           <!-- <li><a href="#">⚙️ Configuración</a></li> -->
+            <li><a href="{% url 'logout' %}">🚪 Cerrar sesión</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>Bienvenido, {{ user.username }}</h1>
+        <p>Esta es la plataforma principal de monitoreo y gestión de Helpnex.</p>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>📊 Resumen del sistema</h3>
+                <p>Visualiza el estado de tus zonas, camas y clientes registrados.</p>
+                <a href="{% url 'analisis' %}" class="btn">Ver análisis</a>
+            </div>
+
+            <div class="card">
+                <h3>⚙️ Configuración rápida</h3>
+                <p>Administra clientes, empleados y zonas desde un solo lugar.</p>
+                {% if user.is_superuser %}
+                    <a href="{% url 'admin_panel' %}" class="btn admin">Panel Admin</a>
+                {% else %}
+                    <a href="#" class="btn">Ir a configuración</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #acb6d1, #8ca6ec);
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    width: 420px;
+    padding: 40px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+}
+.form-container{
+     background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    width: 420px;
+    padding: 40px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 25px rgba(87, 109, 211, 0.4);
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+form input {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+form input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-save, .btn-cancel {
+    width: 48%;
+    height: 45px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-save {
+    background-color: #0074D9;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #005fa3;
+}
+
+.btn-cancel {
+    background-color: #555;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #333;
+}

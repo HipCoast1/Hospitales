@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Helpnex</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <form method="post" action="">
+            {% csrf_token %}
+            <h2>Iniciar Sesión</h2>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p style="color: red;">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="input-box">
+                <span class="icono"><ion-icon name="person"></ion-icon></span>
+                <input type="text" name="username" placeholder="Usuario" required>
+            </div>
+
+            <div class="input-box">
+                <span class="icono"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+
+            <button type="submit" class="button">Ingresar</button>
+
+            <div class="Link-registro">
+                <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

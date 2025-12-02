@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Cliente</title>
+    <link rel="stylesheet" href="{% static 'css/agregar.css' %}">
+</head>
+<body>
+<div class="form-container">
+    <h2>✏️ Editar Cliente</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" value="{{ cliente.nombre }}" required>
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido1" value="{{ cliente.apellido1 }}" required>
+
+        <label for="menu">Tipo de Documento:</label>
+        <select name="tipo_documento" id="menu" required>
+            <option value="1" {% if cliente.tipo_documento == 1 %}selected{% endif %}>👤 DNI</option>
+            <option value="2" {% if cliente.tipo_documento == 2 %}selected{% endif %}>🛂 Pasaporte</option>
+        </select>
+
+        <label>Documento:</label>
+        <input type="text" name="documento" value="{{ cliente.documento }}" required>
+
+        <label>Correo:</label>
+        <input type="email" name="correo" value="{{ cliente.correo }}">
+
+        <label>Tipo de Enfermedad:</label>
+        <select name="tipo_enfermedad" required>
+            <option value="">Seleccione...</option>
+            <option value="Cardiaca" {% if cliente.tipo_enfermedad == 'Cardiaca' %}selected{% endif %}>Cardíaca</option>
+            <option value="Respiratoria" {% if cliente.tipo_enfermedad == 'Respiratoria' %}selected{% endif %}>Respiratoria</option>
+            <option value="Motora" {% if cliente.tipo_enfermedad == 'Motora' %}selected{% endif %}>Motora</option>
+            <option value="Sensorial" {% if cliente.tipo_enfermedad == 'Sensorial' %}selected{% endif %}>Sensorial</option>
+            <option value="Cognitiva" {% if cliente.tipo_enfermedad == 'Cognitiva' %}selected{% endif %}>Cognitiva</option>
+            <option value="Otra" {% if cliente.tipo_enfermedad == 'Otra' %}selected{% endif %}>Otra</option>
+        </select>
+
+        <label>Zona Asignada:</label>
+        <select name="zona_asignada">
+            <option value="">Sin asignar</option>
+            {% for zona in zonas %}
+                <option value="{{ zona.id }}" {% if cliente.zona_asignada.id == zona.id %}selected{% endif %}>{{ zona.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Actualizar</button>
+        <a href="{% url 'admin_panel' %}" class="cancel-btn">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

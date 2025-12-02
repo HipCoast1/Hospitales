@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Empleado</title>
+    <link rel="stylesheet" href="{% static 'css/agregar.css' %}">
+</head>
+<body>
+<div class="form-container">
+    <h2>✏️ Editar Empleado</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" value="{{ empleado.nombre }}" required>
+
+        <label>Apellido:</label>
+        <input type="text" name="apellido1" value="{{ empleado.apellido1 }}" required>
+
+        <label>Cargo:</label>
+        <input type="text" name="cargo" value="{{ empleado.cargo }}" required>
+
+        <label>Zona Asignada:</label>
+        <select name="zona_asignada">
+            <option value="">Sin asignar</option>
+            {% for zona in zonas %}
+                <option value="{{ zona.id }}" {% if empleado.zona_asignada.id == zona.id %}selected{% endif %}>{{ zona.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Actualizar</button>
+        <a href="{% url 'admin_panel' %}" class="cancel-btn">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Análisis - Helpnex</title>
+    <link rel="stylesheet" href="{% static 'css/analisis.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2><a href="{% url 'main' %}" style="color: white; text-decoration: none;">Helpnex</a></h2>
+
+        <ul>
+            <li><a href="{% url 'main' %}">🏠 Inicio</a></li>
+            <li><a class="active" href="{% url 'analisis' %}">📊 Análisis</a></li>
+            {% if user.is_superuser %}
+                <li><a href="{% url 'admin_panel' %}">🛠️ Panel Admin</a></li>
+            {% endif %}
+            <li><a href="{% url 'logout' %}">🚪 Cerrar sesión</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>📈 Panel de Análisis</h1>
+        <p>Visualización de métricas en tiempo real del sistema Helpnex.</p>
+
+        <div class="cards">
+            <div class="card">🏥 Zonas registradas: <strong>{{ total_zonas }}</strong></div>
+            <div class="card">👤 Clientes monitoreados: <strong>{{ total_clientes }}</strong></div>
+            <div class="card">👷 Empleados activos: <strong>{{ total_empleados }}</strong></div>
+        </div>
+
+        <div class="controls">
+            <div>
+                <label>📂 Mostrar datos de:</label>
+                <select id="datasetSelect" onchange="actualizarGrafico()">
+                    <option value="clientesZona">Clientes por Zona</option>
+                    <option value="clientesEnfermedad">Clientes por Enfermedad</option>
+                    <option value="empleadosZona">Empleados por Zona</option>
+                    <option value="empleadosCargo">Empleados por Cargo</option>
+                </select>
+            </div>
+            <div>
+                <label>📊 Tipo de gráfico:</label>
+                <select id="chartTypeSelect" onchange="actualizarGrafico()">
+                    <option value="bar">Barras</option>
+                    <option value="pie">Circular</option>
+                    <option value="line">Líneas</option>
+                    <option value="doughnut">Dona</option>
+                    <option value="radar">Radar</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="mainChart"></canvas>
+        </div>
+    </div>
+    {{ clientes_por_zona|json_script:"clientesZonaData" }}
+    {{ clientes_por_enfermedad|json_script:"clientesEnfermedadData" }}
+    {{ empleados_por_zona|json_script:"empleadosZonaData" }}
+    {{ empleados_por_cargo|json_script:"empleadosCargoData" }}
+
+
+    <script>
+        // === Datos del backend ===
+    const clientesZona = JSON.parse(document.getElementById("clientesZonaData").textContent);
+    const clientesEnfermedad = JSON.parse(document.getElementById("clientesEnfermedadData").textContent);
+    const empleadosZona = JSON.parse(document.getElementById("empleadosZonaData").textContent);
+    const empleadosCargo = JSON.parse(document.getElementById("empleadosCargoData").textContent);
+
+    // === Configuración ===
+    const datos = {
+        clientesZona: {
+            labels: Object.keys(clientesZona),
+            data: Object.values(clientesZona),
+            label: 'Clientes por Zona'
+        },
+        clientesEnfermedad: {
+            labels: Object.keys(clientesEnfermedad),
+            data: Object.values(clientesEnfermedad),
+            label: 'Clientes por Tipo de Enfermedad'
+        },
+        empleadosZona: {
+            labels: Object.keys(empleadosZona),
+            data: Object.values(empleadosZona),
+            label: 'Empleados por Zona'
+        },
+        empleadosCargo: {
+            labels: Object.keys(empleadosCargo),
+            data: Object.values(empleadosCargo),
+            label: 'Empleados por Cargo'
+        }
+    };
+        let chart;
+
+        function crearGrafico(tipo, dataset) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (chart) chart.destroy(); // 🔄 elimina el anterior para recrear limpio
+
+            chart = new Chart(ctx, {
+                type: tipo,
+                data: {
+                    labels: dataset.labels,
+                    datasets: [{
+                        label: dataset.label,
+                        data: dataset.data,
+                        backgroundColor: [
+                            '#0074D9', '#FF4136', '#2ECC40', '#FF851B',
+                            '#B10DC9', '#39CCCC', '#FFDC00', '#001f3f'
+                        ],
+                        borderColor: '#001f3f',
+                        borderWidth: 1,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: false }
+                    },
+                    scales: tipo === 'pie' || tipo === 'doughnut' ? {} : {
+                        y: { beginAtZero: true, grid: { color: '#eee' } },
+                        x: { grid: { color: '#f9f9f9' } }
+                    }
+                }
+            });
+        }
+
+        function actualizarGrafico() {
+            const tipo = document.getElementById('chartTypeSelect').value;
+            const datasetKey = document.getElementById('datasetSelect').value;
+            crearGrafico(tipo, datos[datasetKey]);
+        }
+
+        // Cargar gráfico inicial
+        window.onload = () => actualizarGrafico();
+    </script>
+</body>
+</html>

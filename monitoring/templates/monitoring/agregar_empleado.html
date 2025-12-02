@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Empleado</title>
+    <link rel="stylesheet" href="{% static 'css/agregar.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>👷 Agregar Empleado</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label>Nombre:</label>
+            <input type="text" name="nombre" required>
+
+            <label>Apellido:</label>
+            <input type="text" name="apellido1" required>
+
+            <label>Cargo:</label>
+            <input type="text" name="cargo" required>
+
+            <label>Zona asignada:</label>
+            <select name="zona">
+                <option value="">-- Sin asignar --</option>
+                {% for z in zonas %}
+                    <option value="{{ z.id }}">{{ z.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Guardar</button>
+            <a href="{% url 'admin_panel' %}" class="cancel-btn">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

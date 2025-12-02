@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración - Helpnex</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Helpnex</h2>
+        <ul>
+            <li><a href="{% url 'main' %}">🏠 Inicio</a></li>
+            <li><a href="{% url 'analisis' %}">📊 Análisis</a></li>
+            <li><a class="active" href="{% url 'admin_panel' %}">🛠️ Admin</a></li>
+            <li><a href="{% url 'logout' %}">🚪 Cerrar sesión</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1>Panel de Administración</h1>
+
+        <div class="selector">
+            <label for="menu">Seleccionar categoría:</label>
+            <select id="menu" onchange="mostrarSeccion()">
+                <option value="clientes">👤 Clientes</option>
+                <option value="zonas">🏥 Zonas</option>
+                <option value="empleados">👷 Empleados</option>
+            </select>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Barra de búsqueda -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Buscar por nombre, apellido, documento o zona..." onkeyup="filtrarTabla()">
+        </div>
+
+        <!-- CLIENTES -->
+        <div id="clientes" class="seccion">
+            <div class="section-header">
+                <h2>👤 Gestión de Clientes</h2>
+                <div class="section-tools">
+                    <span class="count-label">Clientes activos: {{ total_clientes }}</span>
+                    <a href="{% url 'agregar_cliente' %}" class="add-btn">➕ Agregar Cliente</a>
+                </div>
+            </div>
+
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Documento</th>
+                        <th>Tipo de enfermedad</th>
+                        <th>Zona asignada</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clientes %}
+                    <tr>
+                        <td>{{ c.nombre }}</td>
+                        <td>{{ c.apellido1 }}</td>
+                        <td>{{ c.documento }}</td>
+                        <td>{{ c.get_tipo_enfermedad_display|default:"-" }}</td>
+                        <td>{{ c.zona_asignada.nombre|default:"Sin zona" }}</td>
+                        <td>
+                            <a href="{% url 'editar_cliente' c.id %}" class="btn-edit">Editar</a>
+                            <a href="{% url 'eliminar_cliente' c.id %}" class="btn-delete" onclick="return confirm('¿Eliminar este cliente?')">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6">No hay clientes registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ZONAS -->
+        <div id="zonas" class="seccion" style="display:none;">
+            <div class="section-header">
+                <h2>🏥 Gestión de Zonas</h2>
+                <div class="section-tools">
+                    <span class="count-label">Zonas registradas: {{ total_zonas }}</span>
+                    <a href="{% url 'agregar_zona' %}" class="add-btn">➕ Agregar Zona</a>
+                </div>
+            </div>
+
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for z in zonas %}
+                    <tr>
+                        <td>{{ z.nombre }}</td>
+                        <td>{{ z.get_tipo_display }}</td>
+                        <td>
+                            <a href="{% url 'editar_zona' z.id %}" class="btn-edit">Editar</a>
+                            <a href="{% url 'eliminar_zona' z.id %}" class="btn-delete" onclick="return confirm('¿Eliminar esta zona?')">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">No hay zonas registradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- EMPLEADOS -->
+        <div id="empleados" class="seccion" style="display:none;">
+            <div class="section-header">
+                <h2>👷 Gestión de Empleados</h2>
+                <div class="section-tools">
+                    <span class="count-label">Empleados activos: {{ total_empleados }}</span>
+                    <a href="{% url 'agregar_empleado' %}" class="add-btn">➕ Agregar Empleado</a>
+                </div>
+            </div>
+
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cargo</th>
+                        <th>Zona asignada</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in empleados %}
+                    <tr>
+                        <td>{{ e.nombre }}</td>
+                        <td>{{ e.apellido1 }}</td>
+                        <td>{{ e.cargo }}</td>
+                        <td>{{ e.zona_asignada.nombre|default:"Sin zona" }}</td>
+                        <td>
+                            {% if e.id %}
+                                <a href="{% url 'editar_empleado' e.id %}" class="btn-edit">Editar</a>
+                                <a href="{% url 'eliminar_empleado' e.id %}" class="btn-delete" onclick="return confirm('¿Eliminar este empleado?')">Eliminar</a>
+                            {% else %}
+                                <span style="color:#888;">(sin ID)</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5">No hay empleados registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function mostrarSeccion() {
+            const secciones = document.querySelectorAll('.seccion');
+            secciones.forEach(s => s.style.display = 'none');
+            const seleccion = document.getElementById('menu').value;
+            document.getElementById(seleccion).style.display = 'block';
+            document.getElementById('searchInput').value = '';
+        }
+
+        function filtrarTabla() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const visibleSection = document.querySelector('.seccion:not([style*="display: none"])');
+            const filas = visibleSection.querySelectorAll("tbody tr");
+            filas.forEach(fila => {
+                const texto = fila.innerText.toLowerCase();
+                fila.style.display = texto.includes(input) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

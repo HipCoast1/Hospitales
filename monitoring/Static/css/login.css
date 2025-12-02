@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ced2d6, #000e36);
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(32, 33, 95, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    width: 400px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    color: #fff;
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: #fff;
+    padding-left: 40px;
+    font-size: 1em;
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.icono {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.Contraseña-Olvidada {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.Contraseña-Olvidada a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.Contraseña-Olvidada a:hover {
+    text-decoration: underline;
+}
+
+.button {
+    width: 100%;
+    height: 50px;
+    background: #0074D9;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #005fa3;
+}

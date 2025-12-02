@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Zona</title>
+    <link rel="stylesheet" href="{% static 'css/agregar.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>➕ Agregar Zona</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre de la zona" required>
+
+            <label for="tipo">Tipo de Zona:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="">Seleccione un tipo</option>
+                <option value="1">Urbana</option>
+                <option value="2">Rural</option>
+                <option value="3">Industrial</option>
+            </select>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" placeholder="Agregue una breve descripción de la zona..."></textarea>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">💾 Guardar</button>
+                <a href="{% url 'admin_panel' %}" class="cancel-btn">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
