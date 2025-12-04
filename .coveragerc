@@ -1,0 +1,11 @@
+[run]
+source = monitoring
+omit =
+    */migrations/*
+    */__init__.py
+    */tests/*
+branch = True
+
+[report]
+show_missing = True
+skip_covered = True

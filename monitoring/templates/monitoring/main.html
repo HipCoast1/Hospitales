@@ -1,11 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Inicio - Helpnex</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
+
 <body>
     <div class="sidebar">
         <h2>
@@ -17,12 +19,9 @@
         <ul>
             <li><a class="active" href="{% url 'main' %}">🏠 Inicio</a></li>
             <li><a href="{% url 'analisis' %}">📊 Análisis</a></li>
-            
             {% if user.is_superuser %}
                 <li><a href="{% url 'admin_panel' %}">🛠️ Panel Admin</a></li>
             {% endif %}
-            
-           <!-- <li><a href="#">⚙️ Configuración</a></li> -->
             <li><a href="{% url 'logout' %}">🚪 Cerrar sesión</a></li>
         </ul>
     </div>
@@ -32,22 +31,46 @@
         <p>Esta es la plataforma principal de monitoreo y gestión de Helpnex.</p>
 
         <div class="dashboard">
-            <div class="card">
-                <h3>📊 Resumen del sistema</h3>
-                <p>Visualiza el estado de tus zonas, camas y clientes registrados.</p>
-                <a href="{% url 'analisis' %}" class="btn">Ver análisis</a>
+            <!-- FILA SUPERIOR -->
+            <div class="top-section">
+                <!-- Izquierda: Resumen del sistema -->
+                <div class="left-section card resumen">
+                    <h3>📊 Resumen del sistema</h3>
+                    <p>Visualiza el estado de tus zonas, camas y clientes registrados.</p>
+                    <a href="{% url 'analisis' %}" class="btn">Ver análisis</a>
+                </div>
+
+                <!-- Derecha: tarjetas de estado -->
+                <div class="right-section">
+                    <div class="small-card">🏥 Zonas registradas: <strong>{{ total_zonas }}</strong></div>
+                    <div class="small-card">👤 Clientes monitoreados: <strong>{{ total_clientes }}</strong></div>
+                    <div class="small-card">👷 Empleados activos: <strong>{{ total_empleados }}</strong></div>
+                </div>
             </div>
 
-            <div class="card">
-                <h3>⚙️ Configuración rápida</h3>
-                <p>Administra clientes, empleados y zonas desde un solo lugar.</p>
-                {% if user.is_superuser %}
-                    <a href="{% url 'admin_panel' %}" class="btn admin">Panel Admin</a>
-                {% else %}
-                    <a href="#" class="btn">Ir a configuración</a>
-                {% endif %}
+            <!-- FILA INFERIOR (misma para todos los usuarios, con botón extra si es admin) -->
+            <div class="bottom-section quienes-somos">
+                <div class="quienes-texto">
+                    <h3>👥 Quiénes somos</h3>
+                    <p>
+                        En <strong>Ibernex</strong>, somos fabricantes de soluciones tecnológicas para la
+                        digitalización de hospitales y residencias.
+                        Diseñamos y desarrollamos software y hardware propios, ofreciendo productos flexibles y
+                        personalizados que mejoran la atención sanitaria y el bienestar de las personas.
+                        Nuestra misión es innovar de forma constante, equilibrando experiencia y talento, con un
+                        compromiso a largo plazo centrado en las personas y en el crecimiento sostenible del sector
+                        sociosanitario.
+                    </p>
+
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin_panel' %}" class="btn admin">⚙️ Ir al Panel Admin</a>
+                    {% endif %}
+                </div>
+
+                <img src="{% static 'img/quienes_somos.png' %}" alt="Imagen institucional">
             </div>
         </div>
     </div>
 </body>
+
 </html>

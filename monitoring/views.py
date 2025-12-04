@@ -62,9 +62,20 @@ def register_view(request):
 def main_view(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'monitoring/main.html')
 
+    # Totales generales
+    total_zonas = Zona.objects.count()
+    total_clientes = Cliente.objects.count()
+    total_empleados = Empleado.objects.count()
 
+    context = {
+        'total_zonas': total_zonas,
+        'total_clientes': total_clientes,
+        'total_empleados': total_empleados,
+    }
+
+    return render(request, 'monitoring/main.html', context)
+    
 # ------------------------------
 # ANÁLISIS (MEJORADO)
 # ------------------------------
@@ -242,7 +253,8 @@ def agregar_zona(request):
         tipo = request.POST.get('tipo')
 
         if nombre and tipo:
-            Zona.objects.create(nombre=nombre, tipo=tipo)
+            identificador = str(uuid.uuid4())[:8]  # 🔹 genera identificador único
+            Zona.objects.create(nombre=nombre, tipo=tipo, identificador=identificador)
             messages.success(request, 'Zona agregada correctamente.')
             return redirect('admin_panel')
         else:
